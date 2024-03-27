@@ -7,7 +7,7 @@ interface ButtonProps {
 
 const Button = ({ text, onClick }: ButtonProps) => {
     return (
-        <button style={{fontSize:13}} onClick={onClick}>{text}</button>
+        <button style={{fontSize:13, color:"lightblue"}} onClick={onClick}>{text}</button>
     );
 }
 

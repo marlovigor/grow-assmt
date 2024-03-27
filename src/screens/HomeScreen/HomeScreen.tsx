@@ -69,7 +69,7 @@ const HomeScreen = () => {
   console.log(events)
 
   return (
-    <div style={{ backgroundColor:"red", padding:10, maxWidth:'80%', margin: "0 auto"}}>
+    <div style={{ backgroundColor:"#282c34", padding:10, maxWidth:'80%', margin: "0 auto"}}>
         <div style={{ padding:10, maxWidth:'90%', margin: "0 auto"}}>
       <SearchBar
         value={search.search}
@@ -77,7 +77,7 @@ const HomeScreen = () => {
         onClick={() => fetchEvents()}
       />
       </div>
-      <div>
+      <div style={{ backgroundColor:"#282c34", padding:10, maxWidth:'80%', margin: "0 auto"}}>
         {events.map((event) => (
           <EventCard
             key={event.name}
@@ -92,7 +92,6 @@ const HomeScreen = () => {
             onClick={() => handleShowDetails(event.id)}
             time={event.dates.start.localTime}
             info=""
-
           />
         ))}
       </div>
