@@ -43,7 +43,9 @@ const EventDetails: React.FC<EventDetailsProps> = ({
         <button onClick={handleToggleText}>
           {showText ? "Hide Details" : "Show More"}
         </button>
+        <div>
         {showText && <Text text={text} />}
+        </div>
         <div>
           {showText && (
             <iframe

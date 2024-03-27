@@ -12,7 +12,7 @@ interface SearchBarProps {
 
 const SearchBar = ({ value, onChange, onClick }: SearchBarProps) => {
     return (
-        <div style={{ maxWidth:'70%', margin: "auto",}}>
+        <div style={{ maxWidth:'70%', margin: "auto", height: '80%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow:'hidden'}}>
             <Input
                 placeholder="Search for events"
                 value={value}

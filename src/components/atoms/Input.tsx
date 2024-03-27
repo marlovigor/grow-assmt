@@ -12,7 +12,7 @@ const Input = ({ placeholder, value, onChange }: InputProps) => {
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            style={{ padding:10,borderRadius:"20px", width: "70%", backgroundColor:'lightblue', marginLeft:"10%"}}
+            style={{ padding:10,borderTopLeftRadius:"20px", borderBottomLeftRadius:"20px", width: "70%",height:15, backgroundColor:'lightblue', marginLeft:"10%"}}
             
 
             
