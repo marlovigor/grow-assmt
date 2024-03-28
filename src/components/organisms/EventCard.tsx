@@ -21,7 +21,7 @@ interface Props {
   
   const EventCard: React.FC<Props> = (props) => {
     return (
-      <div style={{ backgroundColor:"#282c34",marginTop: '2%', marginLeft: "33%", minWidth: "70%", borderWidth: 5,}}>
+      <div style={{margin:'auto', minWidth: "70%", borderWidth: 5,}}>
         <EventDetails
           title={props.title}
           text={props.text}

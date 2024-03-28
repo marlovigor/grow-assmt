@@ -36,8 +36,11 @@ const HomeScreen = () => {
   const [search, setSearch] = useState<userInput>({ search: "" });
   const [showDetailsToggle , setShowDetailsToggle] = useState(false);
   const [expandedEventId, setExpandedEventId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const fetchEvents = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `https://app.ticketmaster.com/discovery/v2/events.json?apikey=6kAEGjz0fctFz3YixNi5lm9HQ1h7X5KH&keyword=${search.search}`///hide keys and url
@@ -56,6 +59,7 @@ const HomeScreen = () => {
     } catch (error) {
       console.error("Error fetching events:", error.message);
     }
+    setIsLoading(false);
   };
   const handleShowDetails = (id: number) => {
     console.log(id)
@@ -69,15 +73,18 @@ const HomeScreen = () => {
   console.log(events)
 
   return (
-    <div style={{ backgroundColor:"#282c34", padding:10, maxWidth:'80%', margin: "0 auto"}}>
-        <div style={{ padding:10, maxWidth:'90%', margin: "0 auto"}}>
+    <div style={{ padding:10, maxWidth:'80%', margin: "0 auto"}}>
+    <div style={{ padding:10, maxWidth:'90%', margin: "0 auto"}}>
       <SearchBar
         value={search.search}
         onChange={(e) => setSearch({ search: e.target.value })}
         onClick={() => fetchEvents()}
       />
-      </div>
-      <div style={{ backgroundColor:"#282c34", padding:10, maxWidth:'80%', margin: "0 auto"}}>
+    </div>
+    {isLoading ? (
+      <div style={{fontSize:150, textAlign:'center', fontWeight:30}}>Loading...</div>
+    ) : (
+      <div style={{ padding:30, maxWidth:'50%', margin: "0 auto"}}>
         {events.map((event) => (
           <EventCard
             key={event.name}
@@ -95,7 +102,8 @@ const HomeScreen = () => {
           />
         ))}
       </div>
-    </div>
+    )}
+  </div>
   );
 };
 

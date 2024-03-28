@@ -32,7 +32,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   };
 
   return (
-    <div style={{padding:10,borderRadius:"20px", maxWidth: "50%", backgroundColor:'steelBlue', justifyContent:'center', alignItems:'center', display:'flex', flexDirection:'column'}}>
+    <div style={{ marginBottom:30,padding:10,borderRadius:"20px", minWidth: "50%", backgroundColor:'steelBlue', justifyContent:'center', alignItems:'center', display:'flex', flexDirection:'column'}}>
       <CardImage src={image} alt={title} />
       <div>
       <Text text={title} />
