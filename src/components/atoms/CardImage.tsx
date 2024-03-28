@@ -1,4 +1,3 @@
-///create card image atom with typescript
 
 import React from 'react';
 

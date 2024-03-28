@@ -24,6 +24,8 @@ interface Event {
       };
     }[];
   };
+  lat: number;
+  lon: number;
 }
 
 interface userInput {
@@ -32,18 +34,17 @@ interface userInput {
 
 const HomeScreen = () => {
   const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState<userInput>({ search: "" });
-  const [showDetailsToggle , setShowDetailsToggle] = useState(false);
   const [expandedEventId, setExpandedEventId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchEvents = async () => {
     setIsLoading(true);
+    setErrorMessage(null);
     try {
       const response = await fetch(
-        `https://app.ticketmaster.com/discovery/v2/events.json?apikey=6kAEGjz0fctFz3YixNi5lm9HQ1h7X5KH&keyword=${search.search}`///hide keys and url
+        `https://app.ticketmaster.com/discovery/v2/events.json?apikey=6kAEGjz0fctFz3YixNi5lm9HQ1h7X5KH&keyword=${search.search}` ///hide keys and url
       );
       if (!response.ok) {
         throw new Error("Failed to fetch events");
@@ -52,17 +53,21 @@ const HomeScreen = () => {
       const newEvents = data._embedded.events.map((event: Event) => ({
         ...event,
       }));
-      setEvents([]); // Clear the events list before adding new events
+      setEvents([]);
       setTimeout(() => {
         setEvents(newEvents);
       }, 1000);
     } catch (error) {
+      setEvents([]);
       console.error("Error fetching events:", error.message);
+      setErrorMessage(
+        " Please try another artist."
+      );
     }
     setIsLoading(false);
   };
   const handleShowDetails = (id: number) => {
-    console.log(id)
+    console.log(id);
     setExpandedEventId(id === expandedEventId ? null : id);
   };
 
@@ -70,40 +75,55 @@ const HomeScreen = () => {
     fetchEvents();
   }, []);
 
-  console.log(events)
+  console.log(events);
 
   return (
-    <div style={{ padding:10, maxWidth:'80%', margin: "0 auto"}}>
-    <div style={{ padding:10, maxWidth:'90%', margin: "0 auto"}}>
-      <SearchBar
-        value={search.search}
-        onChange={(e) => setSearch({ search: e.target.value })}
-        onClick={() => fetchEvents()}
-      />
-    </div>
-    {isLoading ? (
-      <div style={{fontSize:150, textAlign:'center', fontWeight:30}}>Loading...</div>
-    ) : (
-      <div style={{ padding:30, maxWidth:'50%', margin: "0 auto"}}>
-        {events.map((event) => (
-          <EventCard
-            key={event.name}
-            title={event.name}
-            text={event.info}
-            url={event.url}
-            date={event.dates.start.localDate}
-            dateTime={event.dates.start.localTime}
-            location={event._embedded.venues[0].city.name}
-            image={event.images[0].url}
-            showDetails={event.id === expandedEventId}
-            onClick={() => handleShowDetails(event.id)}
-            time={event.dates.start.localTime}
-            info=""
-          />
-        ))}
+    <div style={{ padding: 10, maxWidth: "80%", margin: "0 auto" }}>
+      <div style={{ padding: 10, maxWidth: "90%", margin: "0 auto" }}>
+        <SearchBar
+          value={search.search}
+          onChange={(e) => setSearch({ search: e.target.value })}
+          onClick={() => fetchEvents()}
+        />
       </div>
-    )}
-  </div>
+      {isLoading ? (
+        <div style={{ fontSize:150 , color:'white', textAlign: "center", fontWeight: 30 }}>
+          Loading...
+        </div>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            padding: 30,
+            minWidth: "400px",
+            maxWidth: "700px",
+            margin: "0 auto",
+          }}
+        >
+          {events.length > 0 ? (
+            events.map((event) => (
+              <EventCard
+                key={`${event.id}-${event.name}`}
+                title={event.name}
+                text={event.info}
+                url={event.url}
+                date={event.dates?.start?.localDate}
+                dateTime={event.dates?.start?.localTime}
+                location={event._embedded?.venues[0]?.city?.name}
+                image={event.images[0]?.url}
+                showDetails={event.id === expandedEventId}
+                onClick={() => handleShowDetails(event.id)}
+                time={event.dates?.start?.localTime}
+                info=""
+              />
+            ))
+          ) : (
+            <p style={{fontSize:50 , color:'white'}}>{errorMessage}</p>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 
