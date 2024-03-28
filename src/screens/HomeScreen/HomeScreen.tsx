@@ -40,7 +40,7 @@ const HomeScreen = () => {
   const fetchEvents = async () => {
     try {
       const response = await fetch(
-        `https://app.ticketmaster.com/discovery/v2/events.json?apikey=6kAEGjz0fctFz3YixNi5lm9HQ1h7X5KH&keyword=${search.search}`
+        `https://app.ticketmaster.com/discovery/v2/events.json?apikey=6kAEGjz0fctFz3YixNi5lm9HQ1h7X5KH&keyword=${search.search}`///hide keys and url
       );
       if (!response.ok) {
         throw new Error("Failed to fetch events");
