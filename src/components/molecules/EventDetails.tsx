@@ -32,17 +32,20 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   };
 
   return (
-    <div style={{padding:10,borderRadius:"20px", maxWidth: "90%", backgroundColor:'steelBlue' }}>
+    <div style={{padding:10,borderRadius:"20px", maxWidth: "50%", backgroundColor:'steelBlue', justifyContent:'center', alignItems:'center', display:'flex', flexDirection:'column'}}>
       <CardImage src={image} alt={title} />
+      <div>
       <Text text={title} />
+      </div>
       <div>
         {dateTime && <Text text={dateTime} />}
         {location && <Text text={location} />}
       </div>
-      <div>
+        <div>
         <button onClick={handleToggleText}>
           {showText ? "Hide Details" : "Show More"}
         </button>
+        </div>
         <div>
         {showText && <Text text={text} />}
         </div>
@@ -58,7 +61,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({
             ></iframe>
           )}
         </div>
-      </div>
     </div>
   );
 };

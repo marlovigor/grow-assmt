@@ -8,7 +8,7 @@ interface ImageProps {
 }
 
 const Image: React.FC<ImageProps> = ({ src, alt }) => {
-  return <img style={{width:200,marginRight: 10}} src={src} alt={alt} />;
+  return <img style={{width:"80%", borderRadius:20}} src={src} alt={alt} />;
 };
 
 export default Image;
