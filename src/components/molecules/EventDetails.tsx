@@ -41,7 +41,7 @@ const EventDetails: React.FC<Props> = ({
         padding: 10,
         borderRadius: "20px",
         minWidth: "60%",
-        minHeight:250,
+        minHeight: 250,
         backgroundColor: "steelBlue",
         justifyContent: "center",
         alignItems: "center",
@@ -53,7 +53,7 @@ const EventDetails: React.FC<Props> = ({
       <div>
         <Text text={title} />
       </div>
-      <div style={{marginBottom:12}}>
+      <div style={{ marginBottom: 12 }}>
         {dateTime && <Text text={dateTime} />}
         {location && <Text text={location} />}
       </div>
@@ -85,12 +85,12 @@ const EventDetails: React.FC<Props> = ({
             <Text text={text} />
           </Typography>
           <iframe
-            width="100%"
-            height="300"
-            style={{ border: 0 }}
-            src={`https://www.google.com/maps/embed/v1/view?key=YOUR_API_KEY&center=${lat},${lng}&zoom=15`}
-            allowFullScreen
-          ></iframe>
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyCoSmAnLIQSKXhOUq5aXohWG4AFnme5WGg&q=${lat},${lng}`}
+            width="90%"
+            height="450"
+            aria-hidden="false"
+            frame-border="0"
+          />
         </Box>
       </Modal>
     </div>

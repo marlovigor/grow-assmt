@@ -25,7 +25,7 @@ interface Event {
     }[];
   };
   lat: number;
-  lon: number;
+  lng: number;
 }
 
 interface userInput {
@@ -39,33 +39,30 @@ const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+
   const fetchEvents = async () => {
     setIsLoading(true);
     setErrorMessage(null);
     try {
-      const response = await fetch(
-        `https://app.ticketmaster.com/discovery/v2/events.json?apikey=6kAEGjz0fctFz3YixNi5lm9HQ1h7X5KH&keyword=${search.search}` ///hide keys and url
-      );
+      const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events.json?keyword=${search.search}&apikey=${process.env.REACT_APP_API_KEY}`);
       if (!response.ok) {
-        throw new Error("Failed to fetch events");
+        throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      const newEvents = data._embedded.events.map((event: Event) => ({
+      const newEvents = data._embedded.events.map((event) => ({
         ...event,
+        latitude: event._embedded.venues[0].location.latitude,
+        longitude: event._embedded.venues[0].location.longitude,
       }));
-      setEvents([]);
-      setTimeout(() => {
-        setEvents(newEvents);
-      }, 1000);
+      setEvents(newEvents);
     } catch (error) {
-      setEvents([]);
       console.error("Error fetching events:", error.message);
-      setErrorMessage(
-        " Please try another artist."
-      );
+      setErrorMessage('Error occurred while fetching events. Please try another artist.');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
+
   const handleShowDetails = (id: number) => {
     console.log(id);
     setExpandedEventId(id === expandedEventId ? null : id);
@@ -75,7 +72,8 @@ const HomeScreen = () => {
     fetchEvents();
   }, []);
 
-  console.log(events);
+
+
 
   return (
     <div style={{ padding: 10, maxWidth: "80%", margin: "0 auto" }}>
@@ -104,18 +102,22 @@ const HomeScreen = () => {
           {events.length > 0 ? (
             events.map((event) => (
               <EventCard
-                key={`${event.id}-${event.name}`}
-                title={event.name}
-                text={event.info}
-                url={event.url}
-                date={event.dates?.start?.localDate}
-                dateTime={event.dates?.start?.localTime}
-                location={event._embedded?.venues[0]?.city?.name}
-                image={event.images[0]?.url}
-                showDetails={event.id === expandedEventId}
-                onClick={() => handleShowDetails(event.id)}
-                time={event.dates?.start?.localTime}
-                info=""
+              key={`${event.id}-${event.name}`}
+              title={event.name}
+              text={event.info}
+              url={event.url}
+              date={event.dates?.start?.localDate}
+              dateTime={event.dates?.start?.localTime}
+              location={event._embedded?.venues[0]?.city?.name}
+              image={event.images[0]?.url}
+              showDetails={event.id === expandedEventId}
+              onClick={() => handleShowDetails(event.id)}
+              time={event.dates?.start?.localTime}
+              info=""
+              lat={event.lat}
+              lng={event.lng}
+                
+                
               />
             ))
           ) : (
