@@ -7,6 +7,8 @@ interface Event {
   name: string;
   url: string;
   info: string;
+  latitude: number;
+  longitude: number;
   dates: {
     start: {
       localDate: string;
@@ -22,10 +24,8 @@ interface Event {
       city: {
         name: string;
       };
-    }[];
   };
-  lat: number;
-  lng: number;
+  };
 }
 
 interface userInput {
@@ -39,29 +39,35 @@ const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-
   const fetchEvents = async () => {
     setIsLoading(true);
     setErrorMessage(null);
     try {
-      const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events.json?keyword=${search.search}&apikey=${process.env.REACT_APP_API_KEY}`);
+      const response = await fetch(
+        `https://app.ticketmaster.com/discovery/v2/events.json?apikey=6kAEGjz0fctFz3YixNi5lm9HQ1h7X5KH&keyword=${search.search}`
+      );
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Failed to fetch events");
       }
       const data = await response.json();
-      const newEvents = data._embedded.events.map((event) => ({
+      const newEvents = data._embedded.events.map((event: Event) => ({
         ...event,
         latitude: event._embedded.venues[0].location.latitude,
         longitude: event._embedded.venues[0].location.longitude,
       }));
-      setEvents(newEvents);
+      setEvents([]);
+      setTimeout(() => {
+        setEvents(newEvents);
+      }, 1000);
     } catch (error) {
+      setEvents([]);
       console.error("Error fetching events:", error.message);
-      setErrorMessage('Error occurred while fetching events. Please try another artist.');
-    } finally {
-      setIsLoading(false);
+      setErrorMessage("Please try another artist.");
     }
+    setIsLoading(false);
   };
+
+
 
   const handleShowDetails = (id: number) => {
     console.log(id);
@@ -114,10 +120,8 @@ const HomeScreen = () => {
               onClick={() => handleShowDetails(event.id)}
               time={event.dates?.start?.localTime}
               info=""
-              lat={event.lat}
-              lng={event.lng}
-                
-                
+              lat={event.latitude}
+              lng={event.longitude}
               />
             ))
           ) : (
